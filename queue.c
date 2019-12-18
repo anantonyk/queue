@@ -5,18 +5,23 @@ Element * createElement(int value_)
 	Element *e = (Element *) malloc(sizeof(Element));
 	if(e!=NULL)
 	{
-	e->value = value_;
-	e->next=NULL;
-	return e;
+		e->value = value_;
+		e->next=NULL;
+		return e;
 	}
+	return NULL;
 }
 
 SafeQueue* createQueue()
 {
 	SafeQueue *q = (SafeQueue *) malloc(sizeof(SafeQueue));
-	q->first = NULL;
-	q->last = NULL;
-	return q;
+	if(q!=NULL)
+	{
+		q->first = NULL;
+		q->last = NULL;
+		return q;
+	}
+	return NULL;
 }
 
 bool empty(SafeQueue *q)
@@ -76,13 +81,13 @@ void push(SafeQueue *q, Element * element)
 	q->last = element;
 }
 
-void pop(SafeQueue *q)
+Element* pop(SafeQueue *q)
 {
-	if(!q) return;
-	if(q->first==NULL) return;
+	if(!q) return NULL;
+	if(q->first==NULL) return NULL;
 	struct Element * tmp = q->first;
 	q-> first = q-> first-> next;
-	free(tmp);
+	return tmp;
 }
 
 void display(SafeQueue *q)

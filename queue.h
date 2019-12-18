@@ -17,12 +17,12 @@ typedef struct SafeQueue
 		Element *last;
 } SafeQueue;
 
-extern SafeQueue* createQueue();
-extern void destroyQueue();
-extern int size();
-extern bool empty();
-extern Element* front(SafeQueue *q);
-extern Element* back(SafeQueue *q);
-extern void push(SafeQueue *q, Element *item);
-extern void pop(SafeQueue *q);
-extern void display(SafeQueue *q);
+SafeQueue* createQueue();
+void destroyQueue();
+int size();
+bool empty();
+Element* front(SafeQueue *q);
+Element* back(SafeQueue *q);
+void push(SafeQueue *q, Element *item);
+Element* pop(SafeQueue *q);
+void display(SafeQueue *q);

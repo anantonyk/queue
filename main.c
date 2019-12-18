@@ -47,7 +47,8 @@ int main()
 	display(queue);
 	printf("back: %d\n",back(queue)->value);
 	printf("front: %d\n", front(queue)->value);
-	pop(queue);
+	Element* t = pop(queue);
+	printf("deleted item: %d\n",t->value);
 	display(queue);
 	pthread_t threads[10];
 	for(int i=0; i< 10; i++)

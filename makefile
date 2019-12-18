@@ -1,4 +1,4 @@
-all: queue clean
+all: queue
 
 queue: main.o queue.o
 	gcc -pthread -o $@ main.o queue.o
