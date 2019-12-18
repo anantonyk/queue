@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 typedef int bool;
 #define true 1
@@ -15,6 +16,7 @@ typedef struct SafeQueue
 {
 		Element *first;
 		Element *last;
+		pthread_mutex_t mutex;
 } SafeQueue;
 
 SafeQueue* createQueue();

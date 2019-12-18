@@ -1,4 +1,5 @@
 #include "queue.h"
+
 void * thread_func_1(void * q)
 {
 	printf("thread w/1 start\n");
@@ -64,7 +65,7 @@ int main()
 		}
 	}
 	for(int i=0; i< 10; i++) {
-		pthread_join(threads[i]);
+		pthread_join(threads[i],NULL);
 	}	
       return 0;
 }
