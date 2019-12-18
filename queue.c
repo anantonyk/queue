@@ -49,6 +49,7 @@ int size(SafeQueue *q)
 	return length;
 }
 
+Element* front(SafeQueue *q)
 {
 	if(!q) 
 		return NULL;
