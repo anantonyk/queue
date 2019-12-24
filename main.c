@@ -3,10 +3,10 @@
 void * thread_func_1(void * q)
 {
 	printf("thread w/1 start\n");
-	Element* element[60];
+	Element* element[20];
 	Element * e = createElement(1000);
 	push((SafeQueue*)q,e);
-	for(int i = 0; i < 60; i++)
+	for(int i = 0; i < 20; i++)
 	{
 		element[i] = createElement(i);
 		push((SafeQueue*)q,element[i]);
@@ -25,6 +25,7 @@ void* thread_func_3(void *q)
 	for(int i=0;i<10;i++)
 	{
 		pop((SafeQueue*)q);
+	//	printf("front: %d\n", back((SafeQueue*)q)->value);
 	}
 	printf("thread w/3 finish\n");
 }
@@ -51,8 +52,8 @@ int main()
 	Element* t = pop(queue);
 	printf("deleted item: %d\n",t->value);
 	display(queue);
-	pthread_t threads[10];
-	for(int i=0; i< 10; i++)
+	pthread_t threads[20];
+	for(int i=0; i< 20; i++)
 	{
 		if(i%3==0){
 			pthread_create(&threads[i],NULL,thread_func_1,(void*)queue);

@@ -17,6 +17,7 @@ typedef struct SafeQueue
 		Element *first;
 		Element *last;
 		pthread_mutex_t mutex;
+		int size;
 } SafeQueue;
 
 SafeQueue* createQueue();

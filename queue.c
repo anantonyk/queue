@@ -1,4 +1,5 @@
 #include "queue.h"
+#define MAX_SIZE 100
 
 Element * createElement(int value_)
 {
@@ -19,6 +20,7 @@ SafeQueue* createQueue()
 	{
 		q->first = NULL;
 		q->last = NULL;
+		q->size=0;
 		if(pthread_mutex_init(&q->mutex,NULL) != 0)
 			return NULL;
 		return q;
@@ -30,7 +32,11 @@ bool empty(SafeQueue *q)
 {
 	if(!q) 
 		return true;
-	return (size(q) == 0);
+	pthread_mutex_lock(&q->mutex);
+	bool isempty = q->size == 0 ? 1 : 0;
+	pthread_mutex_unlock(&q->mutex);
+	return isempty;
+	
 }
 
 int size(SafeQueue *q)
@@ -38,13 +44,7 @@ int size(SafeQueue *q)
 	if(!q) 
 		return -1;
 	pthread_mutex_lock(&q->mutex);
-	Element * tmp = q->first;
-	int length = 0;
-	while(tmp != NULL)
-	{
-		length++;
-		tmp = tmp->next;
-	}
+	int length = q->size;
 	pthread_mutex_unlock(&q->mutex);
 	return length;
 }
@@ -53,14 +53,20 @@ Element* front(SafeQueue *q)
 {
 	if(!q) 
 		return NULL;
-	return q->first;
+	pthread_mutex_lock(&q->mutex);
+	Element * tmp = q->first;
+	pthread_mutex_unlock(&q->mutex);
+	return tmp;
 }
 
 Element* back(SafeQueue *q)
 {
 	if(!q) 
 		return NULL;
-	return q->last;
+	pthread_mutex_lock(&q->mutex);
+	Element * tmp = q->last;
+	pthread_mutex_unlock(&q->mutex);
+	return tmp;
 }
 
 void destroyQueue(SafeQueue *q)
@@ -88,11 +94,18 @@ void push(SafeQueue *q, Element * element)
 	{
 		q->first = element;
 		q->last = element;
+		q->size++;
 		pthread_mutex_unlock(&q->mutex);
 		return;
 	}	
+	if(q->size > MAX_SIZE){
+		pthread_mutex_unlock(&q->mutex);
+		printf("Your queue is full\n");
+		return;
+	}
 	q->last->next = element;
 	q->last = element;
+	q->size++;
 	pthread_mutex_unlock(&q->mutex);
 }
 
@@ -100,11 +113,14 @@ Element* pop(SafeQueue *q)
 {
 	if(!q) 
 		return NULL;
-	if(q->first == NULL) 
+	if(q->first == NULL) {
+		printf("Already empty\n");
 		return NULL;
+	}
 	pthread_mutex_lock(&q->mutex);
 	struct Element * tmp = q->first;
 	q-> first = q-> first-> next;
+	q->size--;
 	pthread_mutex_unlock(&q->mutex);
 	return tmp;
 }
